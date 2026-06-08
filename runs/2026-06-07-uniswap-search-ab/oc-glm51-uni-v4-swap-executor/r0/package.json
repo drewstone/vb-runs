@@ -1,0 +1,24 @@
+{
+  "name": "uni-v4-swap-executor",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node serve.mjs",
+    "validate": "node --check serve.mjs && node --check app.js",
+    "dev": "serve -l 3000",
+    "preview": "serve -l 3000"
+  },
+  "devDependencies": {
+    "serve": "^14.2.0"
+  },
+  "overrides": {
+    "vite": "^6.4.2"
+  },
+  "pnpm": {
+    "overrides": {
+      "vite": "^6.4.2"
+    },
+    "minimumReleaseAge": 4320,
+    "minimumReleaseAgeExclude": []
+  }
+}

@@ -1,0 +1,1 @@
+{"root":["./src/App.tsx","./src/config.ts","./src/main.tsx","./src/wagmi.ts","./src/components/SwapCard.tsx","./src/components/TokenSelect.tsx","./src/hooks/usePoolData.ts","./src/hooks/useQuoter.ts","./src/utils/math.ts","./src/utils/tokens.ts"],"version":"5.9.3"}

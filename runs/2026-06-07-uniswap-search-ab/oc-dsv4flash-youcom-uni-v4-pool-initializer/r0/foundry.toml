@@ -1,0 +1,16 @@
+[profile.default]
+evm_version = "cancun"
+solc = "0.8.26"
+optimizer_runs = 44444444
+via_ir = true
+ffi = true
+bytecode_hash = "none"
+gas_limit = "300000000"
+allow_internal_expect_revert = true
+
+remappings = [
+    "@uniswap/v4-core/=node_modules/@uniswap/v4-core/",
+    "@uniswap/v4-periphery/=node_modules/@uniswap/v4-periphery/",
+    "forge-std/=lib/forge-std/src/",
+    "ds-test/=lib/forge-std/lib/ds-test/src/"
+]

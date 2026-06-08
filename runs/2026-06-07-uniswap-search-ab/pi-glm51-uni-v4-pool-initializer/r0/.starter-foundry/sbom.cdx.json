@@ -1,0 +1,30 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.5",
+  "serialNumber": "urn:uuid:sf-1780890514065-0m5k3cqw",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2026-06-08T03:48:34.065Z",
+    "tools": [
+      {
+        "vendor": "tangle-network",
+        "name": "starter-foundry",
+        "version": "0.5.4"
+      }
+    ],
+    "component": {
+      "type": "application",
+      "name": "uni-v4-pool-initializer",
+      "version": "0.0.1"
+    }
+  },
+  "components": [
+    {
+      "name": "serve",
+      "version": "^14.2.0",
+      "bom-ref": "pkg:npm/serve@%5E14.2.0",
+      "type": "library",
+      "purl": "pkg:npm/serve@%5E14.2.0"
+    }
+  ]
+}

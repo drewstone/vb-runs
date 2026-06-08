@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Uniswap V4 Pool Initializer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css">
+  </head>
+  <body>
+    <main class="shell">
+      <!-- Header -->
+      <header class="header">
+        <div class="logo">
+          <div class="logo-icon">✦</div>
+          <span class="logo-text">V4 Pool Init</span>
+          <span class="logo-badge">Uniswap</span>
+        </div>
+        <div class="header-actions">
+          <button class="btn-wallet" id="connectWallet">
+            <span class="dot"></span>
+            <span id="walletLabel">Connect Wallet</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Hero -->
+      <section class="hero">
+        <h1>Initialize a New V4 Pool</h1>
+        <p>Configure your pool key, set the starting price, and call PoolManager.initialize to create a new Uniswap V4 pool.</p>
+      </section>
+
+      <!-- Wizard -->
+      <div class="wizard-container">
+        <!-- Step Indicator -->
+        <div class="step-indicator">
+          <div class="step-item active" data-step="1">
+            <span class="step-num">1</span>
+            <span class="step-label">Tokens</span>
+          </div>
+          <div class="step-item" data-step="2">
+            <span class="step-num">2</span>
+            <span class="step-label">Parameters</span>
+          </div>
+          <div class="step-item" data-step="3">
+            <span class="step-num">3</span>
+            <span class="step-label">Price</span>
+          </div>
+          <div class="step-item" data-step="4">
+            <span class="step-num">4</span>
+            <span class="step-label">Initialize</span>
+          </div>
+        </div>
+
+        <!-- Step 1: Token Selection -->
+        <div class="step-panel active" id="step1">
+          <h2 class="step-title">Select Token Pair</h2>
+          <p class="step-desc">Choose the two currencies for your pool. The token with the lower address becomes currency0.</p>
+
+          <div class="form-grid">
+            <!-- Token 0 -->
+            <div class="form-group" style="position:relative">
+              <label class="form-label">Currency 0</label>
+              <div class="token-selector">
+                <input type="text" class="form-input" id="currency0" placeholder="0x..." spellcheck="false">
+                <button class="token-select-btn" id="selectToken0">
+                  <span id="token0Symbol">Select</span>
+                  <span>▾</span>
+                </button>
+              </div>
+              <div class="token-dropdown" id="dropdown0"></div>
+            </div>
+
+            <!-- Token 1 -->
+            <div class="form-group" style="position:relative">
+              <label class="form-label">Currency 1</label>
+              <div class="token-selector">
+                <input type="text" class="form-input" id="currency1" placeholder="0x..." spellcheck="false">
+                <button class="token-select-btn" id="selectToken1">
+                  <span id="token1Symbol">Select</span>
+                  <span>▾</span>
+                </button>
+              </div>
+              <div class="token-dropdown" id="dropdown1"></div>
+            </div>
+
+            <div class="info-card">
+              <div class="info-card-title">Common Mainnet Tokens</div>
+              <div class="preset-row">
+                <button class="preset-btn" data-token="WETH" data-addr="0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2">WETH</button>
+                <button class="preset-btn" data-token="USDC" data-addr="0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48">USDC</button>
+                <button class="preset-btn" data-token="USDT" data-addr="0xdAC17F958D2ee523a2206206994597C13D831ec7">USDT</button>
+                <button class="preset-btn" data-token="DAI" data-addr="0x6B175474E89094C44Da98b954EedeAC495271d0F">DAI</button>
+                <button class="preset-btn" data-token="WBTC" data-addr="0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599">WBTC</button>
+                <button class="preset-btn" data-token="UNI" data-addr="0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984">UNI</button>
+                <button class="preset-btn" data-token="LINK" data-addr="0x514910771AF9Ca656af840dff83E8264EcF986CA">LINK</button>
+                <button class="preset-btn" data-token="cbBTC" data-addr="0xcbB7C0000aB88B473b1f5aFd9ef808440eed33Bf">cbBTC</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="wizard-nav">
+            <div></div>
+            <button class="btn btn-primary" id="next1">Continue →</button>
+          </div>
+        </div>
+
+        <!-- Step 2: Pool Parameters -->
+        <div class="step-panel" id="step2">
+          <h2 class="step-title">Pool Parameters</h2>
+          <p class="step-desc">Set the fee tier, tick spacing, and optional hooks contract address for your pool.</p>
+
+          <div class="pair-display" id="pairDisplay2"></div>
+
+          <div class="form-grid">
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label class="form-label">Fee Tier <span class="hint">(in hundredths of bip)</span></label>
+                <select class="form-input" id="feeTier">
+                  <option value="100">100 — 0.01%</option>
+                  <option value="500" selected>500 — 0.05%</option>
+                  <option value="3000">3,000 — 0.30%</option>
+                  <option value="10000">10,000 — 1.00%</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Tick Spacing</label>
+                <select class="form-input" id="tickSpacing">
+                  <option value="1">1 — (0.01% fee)</option>
+                  <option value="10">10 — (0.05% fee)</option>
+                  <option value="60" selected>60 — (0.30% fee)</option>
+                  <option value="200">200 — (1.00% fee)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Hooks Contract <span class="hint">(address(0) for no hooks)</span></label>
+              <input type="text" class="form-input" id="hooksAddress" placeholder="0x0000000000000000000000000000000000000000" value="0x0000000000000000000000000000000000000000" spellcheck="false">
+            </div>
+
+            <div class="info-card">
+              <div class="info-card-title">Common Presets</div>
+              <div class="preset-row">
+                <button class="preset-btn" data-fee="100" data-tick="1">Stablecoin 0.01%</button>
+                <button class="preset-btn" data-fee="500" data-tick="10">Standard 0.05%</button>
+                <button class="preset-btn" data-fee="3000" data-tick="60">Volatile 0.30%</button>
+                <button class="preset-btn" data-fee="10000" data-tick="200">Exotic 1.00%</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="wizard-nav">
+            <button class="btn btn-ghost" id="back2">← Back</button>
+            <button class="btn btn-primary" id="next2">Continue →</button>
+          </div>
+        </div>
+
+        <!-- Step 3: Price / sqrtPriceX96 -->
+        <div class="step-panel" id="step3">
+          <h2 class="step-title">Set Initial Price</h2>
+          <p class="step-desc">Enter the initial price ratio or the raw sqrtPriceX96 value. The calculator converts between them in real time.</p>
+
+          <div class="pair-display" id="pairDisplay3"></div>
+
+          <div class="form-grid">
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label class="form-label">Human-Readable Price</label>
+                <input type="text" class="form-input" id="humanPrice" placeholder="e.g. 2000.00" spellcheck="false">
+              </div>
+              <div class="form-group">
+                <label class="form-label">sqrtPriceX96</label>
+                <input type="text" class="form-input" id="sqrtPriceX96" placeholder="79228162514264337593543950336" spellcheck="false">
+              </div>
+            </div>
+
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label class="form-label">Decimals (Currency 0)</label>
+                <input type="number" class="form-input" id="decimals0" value="18" min="0" max="18">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Decimals (Currency 1)</label>
+                <input type="number" class="form-input" id="decimals1" value="6" min="0" max="18">
+              </div>
+            </div>
+
+            <div class="info-card" id="priceInfoCard">
+              <div class="info-card-title">Price Conversion</div>
+              <div class="info-row">
+                <span class="label">Price (token1 per token0)</span>
+                <span class="value" id="priceDisplay">—</span>
+              </div>
+              <div class="info-row">
+                <span class="label">sqrtPriceX96</span>
+                <span class="value" id="sqrtDisplay">—</span>
+              </div>
+              <div class="info-row">
+                <span class="label">Initial Tick</span>
+                <span class="value" id="tickDisplay">—</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="wizard-nav">
+            <button class="btn btn-ghost" id="back3">← Back</button>
+            <button class="btn btn-primary" id="next3">Review & Initialize →</button>
+          </div>
+        </div>
+
+        <!-- Step 4: Review & Submit -->
+        <div class="step-panel" id="step4">
+          <h2 class="step-title">Review Pool Configuration</h2>
+          <p class="step-desc">Confirm the pool key parameters before initializing on-chain.</p>
+
+          <div class="summary-table" id="summaryTable"></div>
+
+          <div id="initializeSection">
+            <div class="wizard-nav" style="border-top: none; padding-top: 0;">
+              <button class="btn btn-ghost" id="back4">← Back</button>
+              <button class="btn btn-primary" id="btnInitialize">⚡ Initialize Pool</button>
+            </div>
+
+            <div id="txStatus" class="tx-status" style="display:none"></div>
+          </div>
+
+          <div id="resultSection" style="display:none">
+            <div class="divider"></div>
+            <div class="result-panel">
+              <div class="result-icon">✓</div>
+              <h3 class="result-title">Pool Initialized</h3>
+              <p class="result-subtitle">Your V4 pool has been created. Save the Pool ID below.</p>
+              <div class="pool-id-display" id="poolIdDisplay">
+                <button class="copy-btn" id="copyPoolId">Copy</button>
+                <span id="poolIdValue"></span>
+              </div>
+            </div>
+
+            <div class="wizard-nav" style="border-top: none; padding-top: 0;">
+              <button class="btn btn-ghost" id="newPool">← New Pool</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Price Calculator (standalone tool) -->
+      <div class="calc-section">
+        <div class="calc-card">
+          <div class="calc-header">
+            <h3><span class="icon">⇄</span> Price Calculator</h3>
+            <div class="calc-toggle">
+              <button class="calc-toggle-btn active" data-mode="price-to-sqrt">Price → sqrt</button>
+              <button class="calc-toggle-btn" data-mode="sqrt-to-price">sqrt → Price</button>
+            </div>
+          </div>
+          <div class="calc-body">
+            <div class="calc-input-group">
+              <div class="form-group" id="calcInput0Group">
+                <label class="form-label" id="calcLabel0">Price (token1/token0)</label>
+                <input type="text" class="form-input" id="calcInput0" placeholder="2000.00" spellcheck="false">
+              </div>
+              <div class="form-group" id="calcInput1Group">
+                <label class="form-label" id="calcLabel1">sqrtPriceX96</label>
+                <input type="text" class="form-input" id="calcInput1" placeholder="" spellcheck="false">
+              </div>
+            </div>
+            <div class="form-grid-2" style="margin-top: 0.75rem;">
+              <div class="form-group">
+                <label class="form-label">Decimals (Token 0)</label>
+                <input type="number" class="form-input" id="calcDecimals0" value="18" min="0" max="18">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Decimals (Token 1)</label>
+                <input type="number" class="form-input" id="calcDecimals1" value="6" min="0" max="18">
+              </div>
+            </div>
+            <div class="calc-result" id="calcResult">
+              <span class="label">Result</span>
+              <span class="value" id="calcResultValue">—</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>

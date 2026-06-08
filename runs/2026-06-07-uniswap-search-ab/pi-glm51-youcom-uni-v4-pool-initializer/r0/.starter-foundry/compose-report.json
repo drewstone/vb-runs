@@ -1,0 +1,82 @@
+{
+  "spec": {
+    "projectName": "uni-v4-pool-initializer",
+    "family": "frontend-static",
+    "layers": [
+      "framework:web-static",
+      "industry:crypto"
+    ],
+    "partner": null,
+    "userPrompt": "A form wizard for initializing a new V4 pool: select currency0 + currency1, set fee tier, tickSpacing, hooks address (or zero), and initial sqrtPriceX96. Call PoolManager.initialize(PoolKey, sqrtPriceX96) and display the resulting PoolId. Show a price calculator that converts sqrtPriceX96 ↔ human-readable price."
+  },
+  "components": {
+    "family": "frontend-static",
+    "layers": [
+      "framework:web-static",
+      "industry:crypto"
+    ],
+    "partner": null,
+    "slots": {}
+  },
+  "variables": {
+    "projectName": "uni-v4-pool-initializer",
+    "packageName": "uni-v4-pool-initializer",
+    "crateName": "uni_v4_pool_initializer",
+    "projectType": "frontend",
+    "port": 4173,
+    "headline": "Starter Foundry Frontend",
+    "subheadline": "An immediate UI artifact with room for agent extension.",
+    "databaseProvider": "none",
+    "industryTone": "bold, technical, future-forward"
+  },
+  "fileOwnership": {
+    "package.json": "frontend-static",
+    "serve.mjs": "frontend-static",
+    "index.html": "framework:web-static",
+    "app.js": "framework:web-static",
+    "styles.css": "framework:web-static",
+    "src/personalize.css": "industry:crypto",
+    "app/personalize.css": "industry:crypto"
+  },
+  "validationChecks": [
+    {
+      "type": "file-exists",
+      "path": "index.html"
+    },
+    {
+      "type": "node-syntax",
+      "path": "serve.mjs"
+    },
+    {
+      "type": "node-syntax",
+      "path": "app.js"
+    },
+    {
+      "type": "http-start",
+      "command": [
+        "node",
+        "serve.mjs"
+      ],
+      "port": "4173",
+      "path": "/",
+      "expect": "Starter Foundry Frontend"
+    }
+  ],
+  "contextHints": {
+    "commands": [
+      "npm run start"
+    ],
+    "entrypoints": [
+      "index.html",
+      "app.js"
+    ],
+    "preview": {
+      "port": "4173",
+      "path": "/"
+    },
+    "extensionPoints": [
+      "starter-data.json",
+      "starter-brand.json"
+    ]
+  }
+}

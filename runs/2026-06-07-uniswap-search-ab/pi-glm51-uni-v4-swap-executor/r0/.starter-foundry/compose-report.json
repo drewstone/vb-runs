@@ -1,0 +1,82 @@
+{
+  "spec": {
+    "projectName": "uni-v4-swap-executor",
+    "family": "frontend-static",
+    "layers": [
+      "framework:web-static",
+      "industry:crypto"
+    ],
+    "partner": null,
+    "userPrompt": "A full swap UI using UniversalRouter: encode Commands.V4_SWAP with SWAP_EXACT_IN_SINGLE or SWAP_EXACT_IN actions, set amountIn/amountOutMinimum, configure the swap path (single pool or multi-hop), and call execute(commands, inputs, deadline). Show the V4Router._swapExactInputSingle flow, decode the resulting BalanceDelta, and display realized slippage vs quoted."
+  },
+  "components": {
+    "family": "frontend-static",
+    "layers": [
+      "framework:web-static",
+      "industry:crypto"
+    ],
+    "partner": null,
+    "slots": {}
+  },
+  "variables": {
+    "projectName": "uni-v4-swap-executor",
+    "packageName": "uni-v4-swap-executor",
+    "crateName": "uni_v4_swap_executor",
+    "projectType": "frontend",
+    "port": 4173,
+    "headline": "Starter Foundry Frontend",
+    "subheadline": "An immediate UI artifact with room for agent extension.",
+    "databaseProvider": "none",
+    "industryTone": "bold, technical, future-forward"
+  },
+  "fileOwnership": {
+    "package.json": "frontend-static",
+    "serve.mjs": "frontend-static",
+    "index.html": "framework:web-static",
+    "app.js": "framework:web-static",
+    "styles.css": "framework:web-static",
+    "src/personalize.css": "industry:crypto",
+    "app/personalize.css": "industry:crypto"
+  },
+  "validationChecks": [
+    {
+      "type": "file-exists",
+      "path": "index.html"
+    },
+    {
+      "type": "node-syntax",
+      "path": "serve.mjs"
+    },
+    {
+      "type": "node-syntax",
+      "path": "app.js"
+    },
+    {
+      "type": "http-start",
+      "command": [
+        "node",
+        "serve.mjs"
+      ],
+      "port": "4173",
+      "path": "/",
+      "expect": "Starter Foundry Frontend"
+    }
+  ],
+  "contextHints": {
+    "commands": [
+      "npm run start"
+    ],
+    "entrypoints": [
+      "index.html",
+      "app.js"
+    ],
+    "preview": {
+      "port": "4173",
+      "path": "/"
+    },
+    "extensionPoints": [
+      "starter-data.json",
+      "starter-brand.json"
+    ]
+  }
+}

@@ -1,0 +1,1 @@
+{"root":["./src/App.tsx","./src/config.ts","./src/main.tsx","./src/types.ts","./src/vite-env.d.ts","./src/components/PriceInfo.tsx","./src/components/SwapCard.tsx","./src/components/TokenSelect.tsx","./src/components/WalletStatus.tsx","./src/hooks/useSwapQuote.ts","./src/utils/quoteMath.ts","./src/utils/tokens.ts"],"version":"5.6.3"}

@@ -1,0 +1,42 @@
+{
+  "name": "uniswap-v4-swap-ui",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "viem": "^2.21.0",
+    "wagmi": "^2.12.0",
+    "@wagmi/core": "^2.13.0",
+    "@tanstack/react-query": "^5.51.0",
+    "@uniswap/v4-sdk": "^1.0.0",
+    "@uniswap/v4-core": "^1.0.0",
+    "@uniswap/v4-periphery": "^1.0.0",
+    "@uniswap/universal-router-sdk": "^2.0.0",
+    "@uniswap/sdk-core": "^5.3.0",
+    "@uniswap/router-sdk": "^1.9.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "autoprefixer": "^10.4.19",
+    "eslint": "^8.57.0",
+    "@eslint/js": "^8.57.0",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "eslint-plugin-react-refresh": "^0.4.9",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "postcss": "^8.4.39",
+    "tailwindcss": "^3.4.4",
+    "typescript": "^5.5.3",
+    "vite": "^5.3.3"
+  }
+}

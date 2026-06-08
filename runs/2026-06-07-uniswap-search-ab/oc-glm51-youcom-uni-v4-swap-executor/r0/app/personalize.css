@@ -1,0 +1,10 @@
+:root {
+  --color-primary: #fc72ff;
+  --color-accent: #5ce1e6;
+  --color-ring: #fc72ff;
+}
+.dark {
+  --color-primary: #fc72ff;
+  --color-accent: #5ce1e6;
+  --color-ring: #fc72ff;
+}

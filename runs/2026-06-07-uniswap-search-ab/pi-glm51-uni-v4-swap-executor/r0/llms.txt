@@ -1,0 +1,18 @@
+# uni-v4-swap-executor
+
+> Runnable static frontend starter with instant preview.
+
+## Stack
+- Family: frontend-static
+- Layers: framework:web-static, industry:crypto
+
+## Entry Points
+- index.html
+- app.js
+
+## Commands
+- npm run start
+
+## Extension Points
+- starter-data.json
+- starter-brand.json

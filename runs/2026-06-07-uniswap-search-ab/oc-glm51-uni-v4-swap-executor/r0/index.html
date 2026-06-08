@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Uniswap V4 Swap — UniversalRouter Executor</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦄</text></svg>">
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/src/personalize.css">
+  </head>
+  <body>
+    <div id="app" class="app-shell">
+      <!-- Header -->
+      <header class="app-header">
+        <div class="app-logo">
+          <svg viewBox="0 0 28 28" fill="none">
+            <circle cx="14" cy="14" r="14" fill="var(--pink-500)"/>
+            <path d="M7.5 13.5c1.5 4 4 7 7.5 9 3.5-2 6-5 7.5-9" stroke="white" stroke-width="2" fill="none"/>
+            <circle cx="14" cy="10" r="2.5" fill="white"/>
+          </svg>
+          <span class="app-logo-text">Uniswap V4</span>
+        </div>
+        <span class="header-badge">UniversalRouter</span>
+      </header>
+
+      <!-- Swap Card -->
+      <div class="swap-card">
+        <!-- Mode Toggle -->
+        <div class="mode-toggle-wrap">
+          <button class="mode-toggle-btn active" data-mode="single" onclick="setSwapMode('single')">
+            SWAP_EXACT_IN_SINGLE
+          </button>
+          <button class="mode-toggle-btn" data-mode="multi" onclick="setSwapMode('multi')">
+            SWAP_EXACT_IN
+          </button>
+        </div>
+
+        <!-- Token In -->
+        <div class="token-input-section" id="token-in-section">
+          <div class="token-input-header">
+            <span class="token-input-label">You pay</span>
+            <span class="token-input-balance" id="balance-in">Balance: 1.42069 ETH</span>
+          </div>
+          <div class="token-input-row">
+            <input type="number" class="token-input-field" id="amount-in" placeholder="0.0" value="1.0" step="any" min="0" oninput="onAmountChange()">
+            <button class="token-selector" id="token-in-selector" onclick="openTokenDropdown('in')">
+              <span class="token-icon eth" id="token-in-icon">E</span>
+              <span class="token-symbol" id="token-in-symbol">ETH</span>
+              <span class="token-selector-arrow">▼</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Swap Arrow -->
+        <div class="swap-arrow-wrap">
+          <button class="swap-arrow-btn" onclick="swapTokens()" title="Switch tokens">
+            ↓
+          </button>
+        </div>
+
+        <!-- Token Out -->
+        <div class="token-input-section" id="token-out-section">
+          <div class="token-input-header">
+            <span class="token-input-label">You receive</span>
+            <span class="token-input-balance" id="balance-out">Balance: 3,200.00 USDC</span>
+          </div>
+          <div class="token-input-row">
+            <input type="number" class="token-input-field" id="amount-out" placeholder="0.0" readonly>
+            <button class="token-selector" id="token-out-selector" onclick="openTokenDropdown('out')">
+              <span class="token-icon usdc" id="token-out-icon">U</span>
+              <span class="token-symbol" id="token-out-symbol">USDC</span>
+              <span class="token-selector-arrow">▼</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Slippage Settings -->
+        <div class="settings-row">
+          <span class="settings-label">
+            Slippage tolerance
+            <i class="info-icon" title="Max acceptable price impact">?</i>
+          </span>
+          <div class="slippage-controls">
+            <button class="slippage-preset active" data-slippage="0.5" onclick="setSlippage(0.5, this)">0.5%</button>
+            <button class="slippage-preset" data-slippage="1.0" onclick="setSlippage(1.0, this)">1.0%</button>
+            <button class="slippage-preset" data-slippage="2.0" onclick="setSlippage(2.0, this)">2.0%</button>
+            <input type="number" class="slippage-custom-input" placeholder="Custom" step="0.1" min="0" max="50" oninput="setSlippageCustom(this.value)">
+          </div>
+        </div>
+
+        <!-- Quote Info -->
+        <div class="quote-info" id="quote-info">
+          <div class="quote-info-row">
+            <span class="quote-info-label">Rate</span>
+            <span class="quote-info-value" id="quote-rate">1 ETH = 3,200.00 USDC</span>
+          </div>
+          <div class="quote-info-row">
+            <span class="quote-info-label">Price impact</span>
+            <span class="quote-info-value" id="quote-impact">&lt; 0.01%</span>
+          </div>
+          <div class="quote-info-row">
+            <span class="quote-info-label">Min. received</span>
+            <span class="quote-info-value" id="quote-min-received">3,184.00 USDC</span>
+          </div>
+          <div class="quote-info-row">
+            <span class="quote-info-label">Network fee</span>
+            <span class="quote-info-value muted" id="quote-fee">~$2.40</span>
+          </div>
+        </div>
+
+        <!-- Multi-hop Path Builder (hidden by default) -->
+        <div class="path-section hidden" id="path-section">
+          <div class="path-section-title">Swap Path (multi-hop)</div>
+          <div class="path-hops" id="path-hops">
+            <div class="path-hop">
+              <span class="path-hop-token">ETH</span>
+              <span class="path-hop-arrow">→</span>
+              <span class="path-hop-token">USDC</span>
+              <span class="path-hop-arrow">→</span>
+              <span class="path-hop-token">USDT</span>
+              <span class="path-hop-pool">0.3% fee</span>
+            </div>
+          </div>
+          <button class="add-hop-btn" onclick="addHop()">+ Add hop</button>
+        </div>
+
+        <!-- Swap Button -->
+        <button class="swap-btn" id="swap-btn" onclick="executeSwap()">
+          Encode &amp; Execute Swap
+        </button>
+      </div>
+
+      <!-- Encoding Panel -->
+      <div class="panel" id="encoding-panel">
+        <div class="panel-header" onclick="togglePanel('encoding')">
+          <span class="panel-title">
+            <span class="panel-title-dot"></span>
+            UniversalRouter Encoding
+          </span>
+          <span class="panel-chevron" id="encoding-chevron">▼</span>
+        </div>
+        <div class="panel-body" id="encoding-body">
+          <!-- Command Encoding -->
+          <div style="margin-bottom: 16px;">
+            <div class="code-label">Commands</div>
+            <div class="code-block" id="encoding-commands"></div>
+          </div>
+          <!-- Input Encoding -->
+          <div style="margin-bottom: 16px;">
+            <div class="code-label">Inputs (ABI-encoded)</div>
+            <div class="code-block" id="encoding-inputs"></div>
+          </div>
+          <!-- Raw Calldata -->
+          <div>
+            <div class="code-label">execute() calldata</div>
+            <div class="code-block" id="encoding-calldata" style="word-break: break-all;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Flow Panel -->
+      <div class="panel" id="flow-panel">
+        <div class="panel-header" onclick="togglePanel('flow')">
+          <span class="panel-title">
+            <span class="panel-title-dot" style="background: var(--green-400);"></span>
+            V4Router._swapExactInputSingle Flow
+          </span>
+          <span class="panel-chevron" id="flow-chevron">▼</span>
+        </div>
+        <div class="panel-body collapsed" id="flow-body">
+          <div class="flow-steps" id="flow-steps"></div>
+        </div>
+      </div>
+
+      <!-- Results Panel -->
+      <div class="panel hidden" id="results-panel">
+        <div class="panel-header" onclick="togglePanel('results')">
+          <span class="panel-title">
+            <span class="panel-title-dot" style="background: var(--blue-400);"></span>
+            Execution Result
+          </span>
+          <span class="panel-chevron open" id="results-chevron">▼</span>
+        </div>
+        <div class="panel-body" id="results-body">
+          <div class="tab-row">
+            <button class="tab-btn active" onclick="setResultTab('delta')">BalanceDelta</button>
+            <button class="tab-btn" onclick="setResultTab('slippage')">Slippage</button>
+            <button class="tab-btn" onclick="setResultTab('log')">Tx Log</button>
+          </div>
+          <div id="result-tab-delta">
+            <div class="result-grid" id="result-delta-grid"></div>
+          </div>
+          <div id="result-tab-slippage" class="hidden">
+            <div class="slippage-bar-wrap" id="slippage-bar-wrap"></div>
+          </div>
+          <div id="result-tab-log" class="hidden">
+            <div class="tx-log" id="tx-log"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Token Dropdown (hidden) -->
+    <div class="token-dropdown-overlay hidden" id="token-dropdown-overlay" onclick="closeTokenDropdown(event)">
+      <div class="token-dropdown" onclick="event.stopPropagation()">
+        <div class="token-dropdown-header">
+          <span class="token-dropdown-title">Select token</span>
+          <button class="token-dropdown-close" onclick="closeTokenDropdown()">&times;</button>
+        </div>
+        <div class="token-dropdown-search">
+          <input type="text" placeholder="Search name or paste address" id="token-search" oninput="filterTokens(this.value)">
+        </div>
+        <div class="token-dropdown-list" id="token-dropdown-list"></div>
+      </div>
+    </div>
+
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>

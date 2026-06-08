@@ -1,0 +1,30 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.5",
+  "serialNumber": "urn:uuid:sf-1780876484291-17nxw6dc",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2026-06-07T23:54:44.291Z",
+    "tools": [
+      {
+        "vendor": "tangle-network",
+        "name": "starter-foundry",
+        "version": "0.5.4"
+      }
+    ],
+    "component": {
+      "type": "application",
+      "name": "uni-v4-swap-quote-preview",
+      "version": "0.0.1"
+    }
+  },
+  "components": [
+    {
+      "name": "serve",
+      "version": "^14.2.0",
+      "bom-ref": "pkg:npm/serve@%5E14.2.0",
+      "type": "library",
+      "purl": "pkg:npm/serve@%5E14.2.0"
+    }
+  ]
+}

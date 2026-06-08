@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Uniswap V4 Swap — Universal Router Executor</title>
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦄</text></svg>">
+  </head>
+  <body>
+    <div id="app">
+      <!-- Header -->
+      <header class="header">
+        <div class="header-inner">
+          <div class="logo">
+            <span class="logo-icon">⟠</span>
+            <span class="logo-text">Uni V4 Swap</span>
+            <span class="logo-badge">UniversalRouter</span>
+          </div>
+          <div class="header-actions">
+            <div class="network-selector" id="networkSelector">
+              <span class="network-dot"></span>
+              <span class="network-name">Sepolia</span>
+            </div>
+            <button class="btn btn-wallet" id="connectWallet">
+              <span class="btn-wallet-icon">👛</span>
+              Connect Wallet
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <div class="swap-layout">
+          <!-- Swap Card -->
+          <div class="swap-card" id="swapCard">
+            <div class="swap-card-header">
+              <h2 class="swap-title">Swap</h2>
+              <div class="swap-header-actions">
+                <button class="btn-icon" id="settingsToggle" title="Settings">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="3"/>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- Settings Panel -->
+            <div class="settings-panel hidden" id="settingsPanel">
+              <div class="settings-group">
+                <label class="settings-label">Slippage Tolerance</label>
+                <div class="slippage-options">
+                  <button class="slippage-btn active" data-slippage="0.5">0.5%</button>
+                  <button class="slippage-btn" data-slippage="1.0">1.0%</button>
+                  <button class="slippage-btn" data-slippage="2.0">2.0%</button>
+                  <div class="slippage-custom">
+                    <input type="number" class="slippage-input" id="customSlippage" placeholder="Custom" min="0.01" max="50" step="0.01">
+                    <span class="slippage-unit">%</span>
+                  </div>
+                </div>
+              </div>
+              <div class="settings-group">
+                <label class="settings-label">Transaction Deadline</label>
+                <div class="deadline-input-wrap">
+                  <input type="number" class="deadline-input" id="deadline" value="30" min="1" max="180">
+                  <span class="deadline-unit">minutes</span>
+                </div>
+              </div>
+              <div class="settings-group">
+                <label class="settings-label">Swap Mode</label>
+                <div class="mode-options">
+                  <button class="mode-btn active" data-mode="SINGLE" title="SWAP_EXACT_IN_SINGLE — single pool hop">Exact In (Single)</button>
+                  <button class="mode-btn" data-mode="MULTI" title="SWAP_EXACT_IN — multi-hop path">Exact In (Multi-hop)</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Token In -->
+            <div class="token-input-section">
+              <div class="token-input-header">
+                <span class="token-input-label">You pay</span>
+                <span class="token-balance" id="tokenInBalance">Balance: —</span>
+              </div>
+              <div class="token-input-row">
+                <button class="token-selector" id="tokenInSelector">
+                  <img class="token-icon" id="tokenInIcon" src="" alt="" hidden>
+                  <span class="token-symbol" id="tokenInSymbol">ETH</span>
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor"><path d="M2.5 4.5L6 8l3.5-3.5"/></svg>
+                </button>
+                <input type="number" class="amount-input" id="amountIn" placeholder="0.0" min="0" step="any">
+              </div>
+              <div class="token-input-footer">
+                <span class="usd-value" id="amountInUsd">≈ $0.00</span>
+              </div>
+            </div>
+
+            <!-- Swap Direction -->
+            <div class="swap-direction">
+              <button class="swap-direction-btn" id="swapDirection" title="Swap tokens">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <path d="M7 16V4m0 0L3 8m4-4l4 4M17 8v12m0 0l4-4m-4 4l-4-4"/>
+                </svg>
+              </button>
+            </div>
+
+            <!-- Token Out -->
+            <div class="token-input-section">
+              <div class="token-input-header">
+                <span class="token-input-label">You receive</span>
+                <span class="token-balance" id="tokenOutBalance">Balance: —</span>
+              </div>
+              <div class="token-input-row">
+                <button class="token-selector" id="tokenOutSelector">
+                  <img class="token-icon" id="tokenOutIcon" src="" alt="" hidden>
+                  <span class="token-symbol" id="tokenOutSymbol">USDC</span>
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor"><path d="M2.5 4.5L6 8l3.5-3.5"/></svg>
+                </button>
+                <input type="number" class="amount-input" id="amountOut" placeholder="0.0" readonly>
+              </div>
+              <div class="token-input-footer">
+                <span class="usd-value" id="amountOutUsd">≈ $0.00</span>
+              </div>
+            </div>
+
+            <!-- Swap Details -->
+            <div class="swap-details hidden" id="swapDetails">
+              <div class="detail-row">
+                <span class="detail-label">Rate</span>
+                <span class="detail-value" id="swapRate">—</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Price Impact</span>
+                <span class="detail-value" id="priceImpact">—</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Min. Received</span>
+                <span class="detail-value" id="minReceived">—</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Router Command</span>
+                <span class="detail-value mono" id="routerCommand">V4_SWAP</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Action</span>
+                <span class="detail-value mono" id="swapAction">SWAP_EXACT_IN_SINGLE</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Pool Fee</span>
+                <span class="detail-value mono" id="poolFee">0.05%</span>
+              </div>
+            </div>
+
+            <!-- Execute Button -->
+            <button class="btn btn-execute" id="executeSwap" disabled>
+              <span class="btn-execute-text" id="executeText">Connect Wallet to Swap</span>
+            </button>
+          </div>
+
+          <!-- Transaction Flow Visualization -->
+          <div class="flow-card" id="flowCard">
+            <h3 class="flow-title">
+              <span class="flow-icon">⟁</span>
+              V4 Swap Execution Flow
+            </h3>
+            <div class="flow-steps" id="flowSteps">
+              <div class="flow-step" data-step="1">
+                <div class="flow-step-marker">
+                  <span class="flow-step-num">1</span>
+                </div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">UniversalRouter.execute()</div>
+                  <div class="flow-step-desc">Encode <code>Commands.V4_SWAP</code> with inputs array</div>
+                  <div class="flow-step-code hidden" id="flowCode1">
+                    <pre><code>commands = 0x10  // V4_SWAP
+inputs = abi.encode(
+  ExactInputSingleParams {
+    poolKey: PoolKey({
+      currency0: tokenIn,
+      currency1: tokenOut,
+      fee: 500,    // 0.05%
+      hooks: address(0),
+      poolManager: 0x...
+    }),
+    zeroForOne: true,
+    amountIn: 1.0e18,
+    amountOutMinimum: 1950e6,
+    hookData: 0x
+  }
+)</code></pre>
+                  </div>
+                </div>
+              </div>
+              <div class="flow-connector"></div>
+              <div class="flow-step" data-step="2">
+                <div class="flow-step-marker">
+                  <span class="flow-step-num">2</span>
+                </div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">V4Router._swapExactInputSingle</div>
+                  <div class="flow-step-desc">Settles input tokens, executes pool swap via PoolManager</div>
+                  <div class="flow-step-code hidden" id="flowCode2">
+                    <pre><code>→ poolManager.swap(params)
+  modifies pool state
+  calculates output via curve
+  emits Swap event</code></pre>
+                  </div>
+                </div>
+              </div>
+              <div class="flow-connector"></div>
+              <div class="flow-step" data-step="3">
+                <div class="flow-step-marker">
+                  <span class="flow-step-num">3</span>
+                </div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">BalanceDelta Decode</div>
+                  <div class="flow-step-desc">Parse packed int128 pair from swap result</div>
+                  <div class="flow-step-code hidden" id="flowCode3">
+                    <pre><code>delta = BalanceDelta({
+  amount0: -1000000000000000000  // int128
+  amount1: +1956234000           // int128
+})
+// negative = tokens out, positive = tokens in</code></pre>
+                  </div>
+                </div>
+              </div>
+              <div class="flow-connector"></div>
+              <div class="flow-step" data-step="4">
+                <div class="flow-step-marker">
+                  <span class="flow-step-num">4</span>
+                </div>
+                <div class="flow-step-content">
+                  <div class="flow-step-title">Take Output & Settle</div>
+                  <div class="flow-step-desc">Claim output tokens, settle input debt</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Slippage Analysis -->
+          <div class="slippage-card hidden" id="slippageCard">
+            <h3 class="slippage-title">
+              <span class="slippage-icon">📊</span>
+              Slippage Analysis
+            </h3>
+            <div class="slippage-grid">
+              <div class="slippage-metric">
+                <span class="slippage-metric-label">Quoted Output</span>
+                <span class="slippage-metric-value" id="quotedOutput">—</span>
+              </div>
+              <div class="slippage-metric">
+                <span class="slippage-metric-label">Realized Output</span>
+                <span class="slippage-metric-value" id="realizedOutput">—</span>
+              </div>
+              <div class="slippage-metric">
+                <span class="slippage-metric-label">Realized Slippage</span>
+                <span class="slippage-metric-value" id="realizedSlippage">—</span>
+              </div>
+              <div class="slippage-metric">
+                <span class="slippage-metric-label">Slippage Tolerance</span>
+                <span class="slippage-metric-value" id="toleranceDisplay">—</span>
+              </div>
+            </div>
+            <div class="slippage-bar-container">
+              <div class="slippage-bar">
+                <div class="slippage-bar-fill" id="slippageBarFill" style="width: 0%"></div>
+                <div class="slippage-bar-marker" id="slippageBarMarker" style="left: 0%"></div>
+              </div>
+              <div class="slippage-bar-labels">
+                <span>0%</span>
+                <span>Tolerance Limit</span>
+                <span>100%</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Transaction History -->
+          <div class="history-card" id="historyCard">
+            <h3 class="history-title">
+              <span class="history-icon">📋</span>
+              Transaction History
+            </h3>
+            <div class="history-list" id="historyList">
+              <div class="history-empty">
+                <span class="history-empty-icon">🔄</span>
+                <p>No swap transactions yet.</p>
+                <p class="history-empty-sub">Connect your wallet and execute a swap to see results here.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <!-- Token Modal -->
+      <div class="modal-overlay hidden" id="tokenModal">
+        <div class="modal">
+          <div class="modal-header">
+            <h3 class="modal-title">Select a Token</h3>
+            <button class="btn-icon modal-close" id="tokenModalClose">✕</button>
+          </div>
+          <div class="modal-search">
+            <input type="text" class="modal-search-input" id="tokenSearch" placeholder="Search by name or address...">
+          </div>
+          <div class="modal-token-list" id="tokenList">
+            <!-- Tokens populated by JS -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,39 @@
+{
+  "name": "uni-v4-swap-executor",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.75.0",
+    "@uniswap/permit2-sdk": "^1.4.0",
+    "@uniswap/sdk-core": "^7.10.3",
+    "@uniswap/universal-router-sdk": "^5.2.0",
+    "@uniswap/v4-sdk": "^1.13.7",
+    "@web3modal/wagmi": "^5.1.11",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "viem": "^2.28.2",
+    "wagmi": "^2.17.7"
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.2",
+    "@types/react-dom": "^19.1.2",
+    "@vitejs/plugin-react": "^5.1.4",
+    "typescript": "~5.8.3",
+    "vite": "^6.4.3"
+  },
+  "overrides": {
+    "vite": "^6.4.3"
+  },
+  "pnpm": {
+    "overrides": {
+      "vite": "^6.4.3"
+    },
+    "minimumReleaseAge": 0,
+    "minimumReleaseAgeExclude": []
+  }
+}

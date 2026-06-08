@@ -1,0 +1,16 @@
+[profile.default]
+src = "src"
+out = "out"
+libs = ["lib"]
+solc_version = "0.8.26"
+evm_version = "cancun"
+via_ir = true
+optimizer = true
+optimizer_runs = 1000000
+
+# Remappings are declared in remappings.txt
+# These are needed to resolve @uniswap/ imports from the npm packages
+remappings = [
+    "@uniswap/v4-core/=../node_modules/@uniswap/v4-core/",
+    "@uniswap/v4-periphery/=../node_modules/@uniswap/v4-periphery/",
+]

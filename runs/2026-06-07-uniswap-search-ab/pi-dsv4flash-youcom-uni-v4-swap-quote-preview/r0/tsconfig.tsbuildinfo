@@ -1,0 +1,1 @@
+{"root":["./src/App.tsx","./src/constants.ts","./src/main.tsx","./src/types.ts","./src/vite-env.d.ts","./src/components/PriceImpactBar.tsx","./src/components/SwapQuotePreview.tsx","./src/components/TokenSelect.tsx","./src/hooks/usePoolData.ts","./src/hooks/useSwapQuote.ts"],"errors":true,"version":"5.8.3"}

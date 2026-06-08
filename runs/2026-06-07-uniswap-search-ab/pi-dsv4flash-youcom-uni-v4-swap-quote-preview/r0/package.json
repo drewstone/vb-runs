@@ -1,0 +1,32 @@
+{
+  "name": "uni-v4-swap-quote",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --port 3000 --host",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview --port 3000"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.101.0",
+    "@uniswap/sdk-core": "^7.17.0",
+    "@uniswap/v4-core": "^1.0.2",
+    "@uniswap/v4-periphery": "^1.0.3",
+    "@uniswap/v4-sdk": "^1.13.18",
+    "@wagmi/core": "^3.5.0",
+    "ethers": "^6.13.5",
+    "jsbi": "^3.2.5",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "viem": "^2.52.2",
+    "wagmi": "^3.6.16"
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.2",
+    "@types/react-dom": "^19.1.2",
+    "@vitejs/plugin-react": "^4.4.1",
+    "typescript": "~5.8.3",
+    "vite": "^6.4.2"
+  }
+}

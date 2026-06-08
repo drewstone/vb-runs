@@ -1,0 +1,1 @@
+{"root":["./src/App.tsx","./src/main.tsx","./src/wagmi.ts","./src/components/FlowVisualization.tsx","./src/components/PathConfig.tsx","./src/components/SwapForm.tsx","./src/components/TokenSelector.tsx","./src/hooks/usePermit2Approval.ts","./src/hooks/useSwap.ts","./src/types/index.ts","./src/utils/v4Swap.ts"],"version":"5.9.3"}
